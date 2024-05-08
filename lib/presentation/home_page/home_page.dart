@@ -18,9 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  HomeController controller = Get.put(HomeController(
-    HomeModel().obs,
-  ));
+  HomeController controller = Get.put(HomeController());
   bool iscompleted = false;
   @override
   void initState() {

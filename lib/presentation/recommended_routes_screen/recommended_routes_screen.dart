@@ -84,21 +84,41 @@ class RecommendedRoutesScreen extends GetWidget<RecommendedRoutesController> {
                         },
                         itemCount: data.length,
                         itemBuilder: (context, index) {
+                          String busNumber = data[index]['route_short_name'];
+                          String busName = 'Bus ${index + 1}';
+                          String routeFullName = data[index]['route_long_name'];
+                          String busTrip = data[index]['route_long_name'];
                           if (controllerSearch.actiononeController.text
                                   .trim() !=
                               '') {
-                            if (data[index]['route_long_name']
-                                    .toString()
-                                    .split(
-                                      '-',
-                                    )[0]
-                                    .toString()
-                                    .toLowerCase()
-                                    .trim() ==
-                                controllerSearch.actiononeController.text
-                                    .toLowerCase()
-                                    .trim()) {
+                            if (busTrip.toString().contains('-')
+                                ? busTrip
+                                        .toString()
+                                        .split(
+                                          '-',
+                                        )[1]
+                                        .toString()
+                                        .toLowerCase()
+                                        .trim() ==
+                                    controllerSearch.actiononeController.text
+                                        .toLowerCase()
+                                        .trim()
+                                : busTrip
+                                        .toString()
+                                        .split(
+                                          '/',
+                                        )[0]
+                                        .toString()
+                                        .toLowerCase()
+                                        .trim() ==
+                                    controllerSearch.actiononeController.text
+                                        .toLowerCase()
+                                        .trim()) {
                               controller.isTrue.value = true;
+
+                              busTrip.toString().contains('-')
+                                  ? print(busTrip.toString())
+                                  : print(busTrip.toString());
                             } else {
                               controller.isTrue.value = false;
                             }
@@ -107,10 +127,7 @@ class RecommendedRoutesScreen extends GetWidget<RecommendedRoutesController> {
                           }
 
                           // print('${data[index]['route_long_name'].toString()}');
-                          String busNumber = data[index]['route_short_name'];
-                          String busName = 'Bus ${index + 1}';
-                          String routeFullName = data[index]['route_long_name'];
-                          String busTrip = data[index]['route_long_name'];
+
                           // String busLocation = data[index]['route_long_name'];
                           return controller.isTrue.value
                               ? BusrouteItemWidget(

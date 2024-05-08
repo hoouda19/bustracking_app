@@ -11,12 +11,10 @@ import 'package:location/location.dart';
 /// This class manages the state of the HomePage, including the
 /// current homeModelObj
 class HomeController extends GetxController {
-  HomeController(this.homeModelObj);
-
   TextEditingController searchController = TextEditingController();
 
   GoogleMapController? mapsController;
-  Rx<HomeModel> homeModelObj;
+  // Rx<HomeModel> homeModelObj;
 
   double lat = 40.6974881;
   double lng = -73.979681;

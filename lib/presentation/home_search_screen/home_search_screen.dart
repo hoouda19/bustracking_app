@@ -257,7 +257,7 @@ class HomeSearchScreen extends GetWidget<HomeSearchController> {
                 CustomElevatedButton(
                   text: "lbl_find_bus".tr,
                   onTap: () {
-                    print(controller.actiononeController.text);
+                    // print(controller.actiononeController.text);
                     Get.toNamed(AppRoutes.recommendedRoutesScreen);
                   },
                   margin: getMargin(
