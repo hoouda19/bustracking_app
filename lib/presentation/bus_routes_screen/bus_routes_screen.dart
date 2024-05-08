@@ -25,12 +25,12 @@ class BusRoutesScreen extends StatelessWidget {
   var controllerBusRoute = Get.find<BusRoutesController>();
   var controllerMap = Get.find<MapController>();
   var CurrentLocation = controller.routeFullName.toString().contains('-')
-      ? controller.routeFullName.split('-')[1]
-      : controller.routeFullName.split('/')[1];
-
-  var destination = controller.routeFullName.toString().contains('-')
       ? controller.routeFullName.split('-')[0]
       : controller.routeFullName.split('/')[0];
+
+  var destination = controller.routeFullName.toString().contains('-')
+      ? controller.routeFullName.split('-')[1]
+      : controller.routeFullName.split('/')[1];
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
