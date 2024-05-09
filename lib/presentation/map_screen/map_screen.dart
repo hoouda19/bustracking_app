@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:bustrackingapp/presentation/home_page/controller/home_controller.dart';
 import 'package:bustrackingapp/presentation/map_screen/controller/map_controller.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -20,6 +21,9 @@ class MapScreen extends StatefulWidget {
   var controller = Get.find<RecommendedRoutesController>();
   // var controllerHomePage = Get.find<HomeController>();
   var controllerMap = Get.find<MapController>();
+  HomeController controllerHome = Get.put(HomeController());
+  RecommendedRoutesController controllerRecommendedRoutes =
+      Get.put(RecommendedRoutesController());
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -99,7 +103,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
-    // geocodingApi();
+    // widget.controllerMap.geocodingApi();
     // var current =
     //     LatLng(widget.controllerHomePage.lat, widget.controllerHomePage.lng);
     return Scaffold(
@@ -177,15 +181,16 @@ class _MapScreenState extends State<MapScreen> {
                                 }
                                 // var data = snapshot.data!.docs;
 
-                                var current = LatLng(
-                                    widget.controllerMap.latFrom,
-                                    widget.controllerMap.lngFrom);
+                                var current = LatLng(widget.controllerHome.lat,
+                                    widget.controllerHome.lng);
                                 var toGo = LatLng(widget.controllerMap.latTo,
                                     widget.controllerMap.lngTo);
+                                print('home ${widget.controllerHome.lat}');
+                                print(' map ${widget.controllerMap.latTo}');
 
                                 getPolyPoints(
-                                  sourceLat: widget.controllerMap.latFrom,
-                                  sourceLng: widget.controllerMap.lngFrom,
+                                  sourceLat: widget.controllerHome.lat,
+                                  sourceLng: widget.controllerHome.lng,
                                   destinationLat: widget.controllerMap.latTo,
                                   destinationLng: widget.controllerMap.lngTo,
                                 );
@@ -232,8 +237,8 @@ class _MapScreenState extends State<MapScreen> {
                               child: InkWell(
                                 onTap: () {
                                   var current = LatLng(
-                                      widget.controllerMap.latFrom,
-                                      widget.controllerMap.lngFrom);
+                                      widget.controllerHome.lat,
+                                      widget.controllerHome.lng);
                                   var toGo = LatLng(widget.controllerMap.latTo,
                                       widget.controllerMap.lngTo);
 
@@ -241,7 +246,7 @@ class _MapScreenState extends State<MapScreen> {
                                       .animateCamera(
                                           CameraUpdate.newLatLngBounds(
                                               getLatLngBounds([current, toGo]),
-                                              30));
+                                              70));
                                 },
                                 child: Container(
                                   margin: getMargin(bottom: 20, right: 10),

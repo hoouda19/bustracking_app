@@ -73,7 +73,7 @@ final Map<String, String> enUs = {
 
   // Bus-Routes Screen
   "msg_50_minutes_travel": "50 Minutes travel  time",
-  "lbl_5_50_p_m": "5:50 P m ",
+  "lbl_5_50_p_m": "5:50Pm ",
   "lbl_see_on_map": "See on map",
   "lbl_syracuse": "Syracuse",
   "msg_next_stop_6_15_p": "Next Stop 6:15 P m ",

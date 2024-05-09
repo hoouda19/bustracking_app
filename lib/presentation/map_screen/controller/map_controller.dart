@@ -17,32 +17,32 @@ class MapController extends GetxController {
       FirebaseFirestore.instance.collection('stops').snapshots();
   GoogleMapController? mapsController;
 
-  var controller = Get.find<RecommendedRoutesController>();
+  // var controller = Get.find<RecommendedRoutesController>();
   @override
   void onClose() {
     super.onClose();
     mapsController!.dispose();
   }
 
-  var latFrom = 0.0;
-  var lngFrom = 0.0;
+  // var latFrom = 0.0;
+  // var lngFrom = 0.0;
   var latTo = 0.0;
   var lngTo = 0.0;
-  Future<void> geocodingApi(String from, String to) async {
+  Future<void> geocodingApi(String to) async {
     const String googelApiKey = 'AIzaSyBVgvpedaj_6YtcZfTxI7UXzg0XhNqWc_Y';
     final bool isDebugMode = true;
     final api = GoogleGeocodingApi(googelApiKey, isLogged: isDebugMode);
-    final searchResultsFrom = await api.search(
-      from,
-      language: 'en',
-    );
+    // final searchResultsFrom = await api.search(
+    //   from,
+    //   language: 'en',
+    // );
     final searchResultsTo = await api.search(
       to,
       language: 'en',
     );
-    var ResultsFrom = searchResultsFrom.results.elementAt(0).geometry!.location;
-    latFrom = ResultsFrom.lat;
-    lngFrom = ResultsFrom.lng;
+    // var ResultsFrom = searchResultsFrom.results.elementAt(0).geometry!.location;
+    // latFrom = ResultsFrom.lat;
+    // lngFrom = ResultsFrom.lng;
 
     var ResultsTo = searchResultsTo.results.elementAt(0).geometry!.location;
     latTo = ResultsTo.lat;

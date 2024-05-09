@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bustrackingapp/presentation/map_screen/controller/map_controller.dart';
 
 import '../recommended_routes_screen/controller/recommended_routes_controller.dart';
@@ -10,9 +12,11 @@ import 'package:bustrackingapp/widgets/app_bar/custom_app_bar.dart';
 import 'package:bustrackingapp/widgets/custom_elevated_button.dart';
 import 'package:bustrackingapp/widgets/custom_icon_button.dart';
 import 'package:bustrackingapp/widgets/custom_outlined_button.dart';
+import 'models/bus_routes_model.dart';
+
 import 'package:flutter/material.dart';
 
-import 'models/bus_routes_model.dart';
+import 'package:intl/intl.dart';
 
 var controller = Get.find<RecommendedRoutesController>();
 
@@ -24,16 +28,28 @@ class BusRoutesScreen extends StatelessWidget {
 
   var controllerBusRoute = Get.find<BusRoutesController>();
   var controllerMap = Get.find<MapController>();
-  var CurrentLocation = controller.routeFullName.toString().contains('-')
-      ? controller.routeFullName.split('-')[0]
-      : controller.routeFullName.split('/')[0];
+  var CurrentLocation =
+      'New York'; //controller.routeFullName.toString().contains('-')
+  // ? controller.routeFullName.split('-')[0]
+  // : controller.routeFullName.split('/')[0];
 
   var destination = controller.routeFullName.toString().contains('-')
       ? controller.routeFullName.split('-')[1]
       : controller.routeFullName.split('/')[1];
+
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
+
+    List<BusRoutesModel> busRoutesModel = [
+      BusRoutesModel(
+          location: "New York".tr,
+          time: '${DateFormat.jmz().format(DateTime.now())}'),
+      BusRoutesModel(location: "lbl_thornridge".tr, time: "lbl_5_50_p_m".tr),
+      BusRoutesModel(location: "lbl_syracuse".tr, time: "lbl_5_50_p_m".tr),
+      BusRoutesModel(location: "lbl_delaware".tr, time: "lbl_5_50_p_m".tr),
+      BusRoutesModel(location: destination, time: "lbl_5_50_p_m".tr),
+    ];
 
     return Scaffold(
         backgroundColor: appTheme.whiteA700,
@@ -242,8 +258,7 @@ class BusRoutesScreen extends StatelessWidget {
                                                       margin: getMargin(
                                                           top: 9, bottom: 2),
                                                       child: Text(
-                                                          "msg_50_minutes_travel"
-                                                              .tr,
+                                                          "${Random().nextInt(6)}0 Minutes travel  time",
                                                           maxLines: 2,
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -312,7 +327,7 @@ class BusRoutesScreen extends StatelessWidget {
                                       padding: getPadding(
                                           left: 12, top: 9, bottom: 8),
                                       child: Text(
-                                          'Bus ${controller.currnetBus} from ',
+                                          'Bus ${controller.currnetBus} from New York to $destination',
                                           style: theme.textTheme.titleMedium))
                                 ]),
                               ),
@@ -382,9 +397,11 @@ class BusRoutesScreen extends StatelessWidget {
                                                 NeverScrollableScrollPhysics(),
                                             padding: EdgeInsets.zero,
                                             itemBuilder: (context, index) {
+                                              // BusRoutesModel model =
+                                              //     controllerBusRoute
+                                              //         .routeList()[index];
                                               BusRoutesModel model =
-                                                  controllerBusRoute
-                                                      .routeList[index];
+                                                  busRoutesModel[index];
 
                                               return Row(
                                                   mainAxisAlignment:
@@ -440,8 +457,7 @@ class BusRoutesScreen extends StatelessWidget {
                                                     )
                                                   ]);
                                             },
-                                            itemCount: controllerBusRoute
-                                                .routeList.length)),
+                                            itemCount: busRoutesModel.length)),
 
                                     // Align(
                                     //     alignment: Alignment.bottomCenter,
@@ -700,7 +716,7 @@ class BusRoutesScreen extends StatelessWidget {
   /// push the named route for the mapScreen.
   onTapSeeonmap() {
     Get.toNamed(AppRoutes.mapScreen, arguments: false);
-    controllerMap.geocodingApi(CurrentLocation, destination);
+    controllerMap.geocodingApi(destination);
   }
 
   /// Navigates to the mapScreen when the action is triggered.
@@ -709,6 +725,6 @@ class BusRoutesScreen extends StatelessWidget {
   /// push the named route for the mapScreen.
   onTapTakeride() {
     Get.toNamed(AppRoutes.mapScreen, arguments: false);
-    controllerMap.geocodingApi(CurrentLocation, destination);
+    controllerMap.geocodingApi(destination);
   }
 }

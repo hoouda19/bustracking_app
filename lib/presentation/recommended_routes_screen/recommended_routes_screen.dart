@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../home_search_screen/controller/home_search_controller.dart';
 import '../recommended_routes_screen/widgets/busroute_item_widget.dart';
 import 'controller/recommended_routes_controller.dart';
@@ -17,7 +19,7 @@ class RecommendedRoutesScreen extends GetWidget<RecommendedRoutesController> {
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
-
+    Random rondam = Random();
     return Scaffold(
         backgroundColor: appTheme.whiteA700,
         body: SizedBox(
@@ -84,10 +86,12 @@ class RecommendedRoutesScreen extends GetWidget<RecommendedRoutesController> {
                         },
                         itemCount: data.length,
                         itemBuilder: (context, index) {
+                          String id = data[index].id;
                           String busNumber = data[index]['route_short_name'];
                           String busName = 'Bus ${index + 1}';
                           String routeFullName = data[index]['route_long_name'];
                           String busTrip = data[index]['route_long_name'];
+                          // controller.tripsTime(id);
                           if (controllerSearch.actiononeController.text
                                   .trim() !=
                               '') {
@@ -116,9 +120,9 @@ class RecommendedRoutesScreen extends GetWidget<RecommendedRoutesController> {
                                         .trim()) {
                               controller.isTrue.value = true;
 
-                              busTrip.toString().contains('-')
-                                  ? print(busTrip.toString())
-                                  : print(busTrip.toString());
+                              // busTrip.toString().contains('-')
+                              //     ? print(busTrip.toString())
+                              //     : print(busTrip.toString());
                             } else {
                               controller.isTrue.value = false;
                             }
@@ -129,34 +133,23 @@ class RecommendedRoutesScreen extends GetWidget<RecommendedRoutesController> {
                           // print('${data[index]['route_long_name'].toString()}');
 
                           // String busLocation = data[index]['route_long_name'];
+                          var markCheck = busTrip.toString().contains('-')
+                              ? busTrip.toString().split('-')[0].toString()
+                              : busTrip.toString().split(
+                                    '/',
+                                  )[0];
                           return controller.isTrue.value
                               ? BusrouteItemWidget(
                                   BusrouteItemModel(
-                                    // busLocation: data[index]['stop_lat'].toString(),
-                                    busNumber: busNumber,
-                                    busName: busName,
-                                    routeFullName: routeFullName,
-                                    busComingFrom:
-                                        busTrip.toString().contains('-')
-                                            ? busTrip
-                                                .toString()
-                                                .split('-')[1]
-                                                .toString()
-                                            : busTrip.toString().split(
-                                                  '/',
-                                                )[1],
-                                    busLocation:
-                                        busTrip.toString().contains('-')
-                                            ? busTrip
-                                                .toString()
-                                                .split(
-                                                  '-',
-                                                )[0]
-                                                .toString()
-                                            : busTrip.toString().split(
-                                                  '/',
-                                                )[0],
-                                  ), onTapBusroute: () {
+                                      // busLocation: data[index]['stop_lat'].toString(),
+
+                                      busNumber: busNumber,
+                                      busName: busName,
+                                      routeFullName: routeFullName,
+                                      busComingFrom: 'Comming from $markCheck',
+                                      busLocation:
+                                          '${rondam.nextInt(6)} Km away from you'),
+                                  onTapBusroute: () {
                                   controller.currnetBus = index + 1;
                                   controller.routeFullName = busTrip;
 
