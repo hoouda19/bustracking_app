@@ -86,7 +86,7 @@ class RecommendedRoutesScreen extends GetWidget<RecommendedRoutesController> {
                         },
                         itemCount: data.length,
                         itemBuilder: (context, index) {
-                          String id = data[index].id;
+                          // String id = data[index].id;
                           String busNumber = data[index]['route_short_name'];
                           String busName = 'Bus ${index + 1}';
                           String routeFullName = data[index]['route_long_name'];
@@ -133,8 +133,13 @@ class RecommendedRoutesScreen extends GetWidget<RecommendedRoutesController> {
                           // print('${data[index]['route_long_name'].toString()}');
 
                           // String busLocation = data[index]['route_long_name'];
-                          var markCheck = busTrip.toString().contains('-')
+                          var markCheckfirst = busTrip.toString().contains('-')
                               ? busTrip.toString().split('-')[0].toString()
+                              : busTrip.toString().split(
+                                    '/',
+                                  )[0];
+                          var markChecksec = busTrip.toString().contains('-')
+                              ? busTrip.toString().split('-')[1].toString()
                               : busTrip.toString().split(
                                     '/',
                                   )[0];
@@ -145,10 +150,12 @@ class RecommendedRoutesScreen extends GetWidget<RecommendedRoutesController> {
 
                                       busNumber: busNumber,
                                       busName: busName,
-                                      routeFullName: routeFullName,
-                                      busComingFrom: 'Comming from $markCheck',
+                                      routeFullName:
+                                          'New York to $markChecksec',
+                                      busComingFrom:
+                                          'Comming from $markCheckfirst',
                                       busLocation:
-                                          '${rondam.nextInt(6)} Km away from you'),
+                                          '${rondam.nextInt(8) + 1} Km away from you'),
                                   onTapBusroute: () {
                                   controller.currnetBus = index + 1;
                                   controller.routeFullName = busTrip;

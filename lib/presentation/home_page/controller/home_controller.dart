@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:bustrackingapp/core/app_export.dart';
-import 'package:bustrackingapp/presentation/home_page/models/home_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';

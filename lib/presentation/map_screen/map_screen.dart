@@ -13,13 +13,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import '../recommended_routes_screen/controller/recommended_routes_controller.dart';
 import '../share_ride_screen/share_ride_screen.dart';
-import 'package:google_geocoding_api/google_geocoding_api.dart';
 
 class MapScreen extends StatefulWidget {
   bool? isShare;
   MapScreen({Key? key, this.isShare}) : super(key: key);
   var controller = Get.find<RecommendedRoutesController>();
-  // var controllerHomePage = Get.find<HomeController>();
   var controllerMap = Get.find<MapController>();
   HomeController controllerHome = Get.put(HomeController());
   RecommendedRoutesController controllerRecommendedRoutes =
@@ -103,9 +101,18 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
-    // widget.controllerMap.geocodingApi();
-    // var current =
-    //     LatLng(widget.controllerHomePage.lat, widget.controllerHomePage.lng);
+    //
+    double lat = widget.controllerMap.latTo.value;
+    double lng = widget.controllerMap.lngTo.value;
+    var current = LatLng(widget.controllerHome.lat, widget.controllerHome.lng);
+    var toGo = LatLng(lat, lng);
+
+    getPolyPoints(
+      sourceLat: widget.controllerHome.lat,
+      sourceLng: widget.controllerHome.lng,
+      destinationLat: widget.controllerMap.latTo.value,
+      destinationLng: widget.controllerMap.lngTo.value,
+    );
     return Scaffold(
         extendBody: true,
         extendBodyBehindAppBar: true,
@@ -136,19 +143,6 @@ class _MapScreenState extends State<MapScreen> {
                                         getMargin(left: 16, top: 3, bottom: 3),
                                     onTap: () {
                                       onTapBus01();
-
-                                      // var current = LatLng(
-                                      //     widget.controllerMap.latFrom,
-                                      //     widget.controllerMap.lngFrom);
-                                      // var toGo = LatLng(
-                                      //     widget.controllerMap.latTo,
-                                      //     widget.controllerMap.lngTo);
-                                      // widget.controllerMap.mapsController!
-                                      //     .animateCamera(
-                                      //         CameraUpdate.newLatLngBounds(
-                                      //             getLatLngBounds(
-                                      //                 [current, toGo]),
-                                      //             20));
                                     }),
                                 title: AppbarTitle(
                                     text: 'Bus ${widget.controller.currnetBus}',
@@ -159,78 +153,67 @@ class _MapScreenState extends State<MapScreen> {
                         flex: 9,
                         child: Stack(
                           children: [
-                            StreamBuilder(
-                              stream: widget.controllerMap.fireStoreDB,
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return Center(
-                                      child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const CircularProgressIndicator(),
-                                      SizedBox(
-                                        height: mediaQueryData.size.width / 20,
+                            Obx(
+                              () => widget.controllerMap.iscompleted.value ==
+                                      true
+                                  ? GoogleMap(
+                                      onMapCreated: (con) {
+                                        widget.controllerMap.mapsController =
+                                            con;
+
+                                        setState(() {});
+                                        // widget.controllerHomePage.mapsController = con;
+                                      },
+                                      initialCameraPosition: CameraPosition(
+                                        target: current,
+                                        zoom: 10,
                                       ),
-                                      Text(
-                                        'loading please wait..',
-                                        style: TextStyle(fontSize: 15),
-                                      )
-                                    ],
-                                  ));
-                                }
-                                // var data = snapshot.data!.docs;
-
-                                var current = LatLng(widget.controllerHome.lat,
-                                    widget.controllerHome.lng);
-                                var toGo = LatLng(widget.controllerMap.latTo,
-                                    widget.controllerMap.lngTo);
-                                print('home ${widget.controllerHome.lat}');
-                                print(' map ${widget.controllerMap.latTo}');
-
-                                getPolyPoints(
-                                  sourceLat: widget.controllerHome.lat,
-                                  sourceLng: widget.controllerHome.lng,
-                                  destinationLat: widget.controllerMap.latTo,
-                                  destinationLng: widget.controllerMap.lngTo,
-                                );
-                                return GoogleMap(
-                                  onMapCreated: (con) {
-                                    widget.controllerMap.mapsController = con;
-
-                                    setState(() {});
-                                    // widget.controllerHomePage.mapsController = con;
-                                  },
-                                  initialCameraPosition: CameraPosition(
-                                    target: current,
-                                    zoom: 10,
-                                  ),
-                                  polylines: {
-                                    Polyline(
-                                      polylineId: const PolylineId("route"),
-                                      points: polylineCoordinates,
-                                      color: Colors.blueAccent,
-                                      width: 6,
+                                      polylines: {
+                                        Polyline(
+                                          polylineId: const PolylineId("route"),
+                                          points: polylineCoordinates,
+                                          color: Colors.blueAccent,
+                                          width: 6,
+                                        ),
+                                      },
+                                      zoomControlsEnabled: false,
+                                      markers: {
+                                        Marker(
+                                            icon: BitmapDescriptor
+                                                .defaultMarkerWithHue(
+                                                    BitmapDescriptor.hueAzure),
+                                            markerId: MarkerId(
+                                              'mapfrom',
+                                            ),
+                                            position: current),
+                                        Marker(
+                                            markerId: MarkerId(
+                                              'mapto',
+                                            ),
+                                            position: toGo),
+                                      },
+                                    )
+                                  : Container(
+                                      alignment: Alignment.center,
+                                      color: Colors.white,
+                                      height: double.infinity,
+                                      width: double.infinity,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CircularProgressIndicator(),
+                                          SizedBox(
+                                            height:
+                                                mediaQueryData.size.width / 20,
+                                          ),
+                                          Text(
+                                            'loading please wait..',
+                                            style: TextStyle(fontSize: 15),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  },
-                                  zoomControlsEnabled: false,
-                                  markers: {
-                                    Marker(
-                                        icon: BitmapDescriptor
-                                            .defaultMarkerWithHue(
-                                                BitmapDescriptor.hueAzure),
-                                        markerId: MarkerId(
-                                          'mapfrom',
-                                        ),
-                                        position: current),
-                                    Marker(
-                                        markerId: MarkerId(
-                                          'mapto',
-                                        ),
-                                        position: toGo),
-                                  },
-                                );
-                              },
                             ),
                             Align(
                               alignment: Alignment.bottomRight,
@@ -239,8 +222,9 @@ class _MapScreenState extends State<MapScreen> {
                                   var current = LatLng(
                                       widget.controllerHome.lat,
                                       widget.controllerHome.lng);
-                                  var toGo = LatLng(widget.controllerMap.latTo,
-                                      widget.controllerMap.lngTo);
+                                  var toGo = LatLng(
+                                      widget.controllerMap.latTo.value,
+                                      widget.controllerMap.lngTo.value);
 
                                   widget.controllerMap.mapsController!
                                       .animateCamera(

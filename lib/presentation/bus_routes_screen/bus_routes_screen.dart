@@ -22,17 +22,15 @@ var controller = Get.find<RecommendedRoutesController>();
 
 // ignore: must_be_immutable
 class BusRoutesScreen extends StatelessWidget {
-  // final double lat;
-  // final double lng;
   BusRoutesScreen({Key? key}) : super(key: key);
 
   var controllerBusRoute = Get.find<BusRoutesController>();
   var controllerMap = Get.find<MapController>();
+
   var CurrentLocation =
       'New York'; //controller.routeFullName.toString().contains('-')
   // ? controller.routeFullName.split('-')[0]
   // : controller.routeFullName.split('/')[0];
-
   var destination = controller.routeFullName.toString().contains('-')
       ? controller.routeFullName.split('-')[1]
       : controller.routeFullName.split('/')[1];
@@ -40,17 +38,7 @@ class BusRoutesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
-
-    List<BusRoutesModel> busRoutesModel = [
-      BusRoutesModel(
-          location: "New York".tr,
-          time: '${DateFormat.jmz().format(DateTime.now())}'),
-      BusRoutesModel(location: "lbl_thornridge".tr, time: "lbl_5_50_p_m".tr),
-      BusRoutesModel(location: "lbl_syracuse".tr, time: "lbl_5_50_p_m".tr),
-      BusRoutesModel(location: "lbl_delaware".tr, time: "lbl_5_50_p_m".tr),
-      BusRoutesModel(location: destination, time: "lbl_5_50_p_m".tr),
-    ];
-
+    // DateFormat.jmz().format(DateTime.now());
     return Scaffold(
         backgroundColor: appTheme.whiteA700,
         body: SizedBox(
@@ -258,7 +246,8 @@ class BusRoutesScreen extends StatelessWidget {
                                                       margin: getMargin(
                                                           top: 9, bottom: 2),
                                                       child: Text(
-                                                          "${Random().nextInt(6)}0 Minutes travel  time",
+                                                          "msg_50_minutes_travel"
+                                                              .tr,
                                                           maxLines: 2,
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -397,11 +386,9 @@ class BusRoutesScreen extends StatelessWidget {
                                                 NeverScrollableScrollPhysics(),
                                             padding: EdgeInsets.zero,
                                             itemBuilder: (context, index) {
-                                              // BusRoutesModel model =
-                                              //     controllerBusRoute
-                                              //         .routeList()[index];
                                               BusRoutesModel model =
-                                                  busRoutesModel[index];
+                                                  controllerBusRoute
+                                                      .routeList()[index];
 
                                               return Row(
                                                   mainAxisAlignment:
@@ -457,7 +444,9 @@ class BusRoutesScreen extends StatelessWidget {
                                                     )
                                                   ]);
                                             },
-                                            itemCount: busRoutesModel.length)),
+                                            itemCount: controllerBusRoute
+                                                .routeList()
+                                                .length)),
 
                                     // Align(
                                     //     alignment: Alignment.bottomCenter,

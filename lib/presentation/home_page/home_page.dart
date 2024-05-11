@@ -67,16 +67,6 @@ class _HomePageState extends State<HomePage> {
               // ),
               Stack(
                 children: [
-                  // Container(
-                  //   alignment: Alignment.center,
-                  //   color: Colors.white,
-                  //   height: double.infinity,
-                  //   width: double.infinity,
-                  //   child: Text(
-                  //     'Map Loading...',
-                  //     style: TextStyle(fontSize: 35, color: Colors.grey),
-                  //   ),
-                  // ),
                   Obx(
                     () => controller.iscompleted.value == true
                         ? GoogleMap(
